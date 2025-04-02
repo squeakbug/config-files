@@ -8,6 +8,7 @@
 
   home.packages = [
     pkgs.cowsay
+    pkgs.htop
   ];
 
   home.file = {
