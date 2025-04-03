@@ -28,27 +28,58 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  outputs = { 
+    self, 
+    nixpkgs,
+    nixpkgs-unstable,
+    flake-parts,
+    home-manager, 
+    ... 
+  } @ inputs:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-    in {
-      homeConfigurations = {
-        "workstation" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [
-            ./home.nix
-            {
-              home = {
-                homeDirectory = "/home/workstation";
-                username = "workstation";
-              };
-            }
+      mkSystem = import ./utils/mkSystem.nix inputs;
+      # https://stackoverflow.com/a/54505212
+      recursiveMerge = with builtins;
+        attrList: let
+          f = attrPath:
+            zipAttrsWith (
+              n: values:
+                if tail values == []
+                then head values
+                else if all isList values
+                then unique (concatLists values)
+                else if all isAttrs values
+                then f (attrPath ++ [n]) values
+                else last values
+            );
+        in
+          f [] attrList;
+      mkSystems = hostnames: recursiveMerge (map (hostname: mkSystem hostname) hostnames);
+    in
+      flake-parts.lib.mkFlake {inherit inputs;} {
+        systems = ["x86_64-linux"];
+
+        flake = mkSystems [
+          "gateway"
+          "homelab"
+          "vps"
+          "workstation"
+        ];
+        perSystem = {system, ...}: {
+          _module.args = {
+            pkgs = import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+            pkgs-unstable = import nixpkgs-unstable {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+
+          imports = [
+
           ];
         };
       };
-    };
-}
+} 
