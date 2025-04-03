@@ -17,6 +17,9 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+    };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.1";
@@ -26,6 +29,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { 
@@ -33,11 +40,11 @@
     nixpkgs,
     nixpkgs-unstable,
     flake-parts,
-    home-manager, 
+    home-manager,
     ... 
   } @ inputs:
     let
-      mkSystem = import ./utils/mkSystem.nix inputs;
+      mkSystem = import ./utils/mk-system.nix inputs;
       # https://stackoverflow.com/a/54505212
       recursiveMerge = with builtins;
         attrList: let
@@ -56,16 +63,18 @@
           f [] attrList;
       mkSystems = hostnames: recursiveMerge (map (hostname: mkSystem hostname) hostnames);
     in
-      flake-parts.lib.mkFlake {inherit inputs;} {
-        systems = ["x86_64-linux"];
-
+      flake-parts.lib.mkFlake { inherit inputs; } {
+        imports = [
+          inputs.home-manager.flakeModules.home-manager
+        ];
         flake = mkSystems [
           "gateway"
           "homelab"
           "vps"
           "workstation"
         ];
-        perSystem = {system, ...}: {
+        systems = ["x86_64-linux"];
+        perSystem = { system, ... }: {
           _module.args = {
             pkgs = import nixpkgs {
               inherit system;
@@ -76,10 +85,6 @@
               config.allowUnfree = true;
             };
           };
-
-          imports = [
-
-          ];
         };
       };
 } 

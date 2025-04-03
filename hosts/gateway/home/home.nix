@@ -3,11 +3,12 @@
 {
   imports =
     [
-      ../home.nix
+      ../../../common-home.nix
     ];
 
   home.packages = [
-    
+    pkgs.vim
+    pkgs.neofetch
   ];
 
   home.file = {

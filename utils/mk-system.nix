@@ -6,6 +6,7 @@
   sops-nix,
   ...
 } @ inputs: hostname: let
+<<<<<<< HEAD
   hostPath = ../hosts/${hostname};
   hostConfig = import ./get-host-config.nix hostPath;
   pkgs = import nixpkgs {
@@ -67,4 +68,19 @@ in {
         builtins.attrNames (builtins.removeAttrs hostConfig.users ["root"])
       )
     )
+=======
+  mkUserHM = home-manager.lib.homeManagerConfiguration {
+    pkgs = import nixpkgs {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
+    modules = [
+      ../hosts/${hostname}/home/home.nix
+    ];
+  };
+in {
+  homeConfigurations = {
+    "workstation@${hostname}" = mkUserHM;
+  };
+>>>>>>> 12d69f0 (init hosts)
 }
