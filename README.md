@@ -13,5 +13,9 @@
 * [Dotfiles manager, based on NixOS](https://nix-community.github.io/home-manager/)
 
 * [Multi-host example](https://github.com/EmergentMind/nix-config)
+* [Another multi-host example](https://github.com/hmajid2301/nixicle)
+
+* [snowflakeos](https://snowflakeos.org/)
+* [mise](https://github.com/jdx/mise)
 
 TODO: introduce proxmox config to homelab config 
