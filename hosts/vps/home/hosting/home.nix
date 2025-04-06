@@ -3,7 +3,7 @@
 {
   imports =
     [
-      ../home.nix
+      ../../../../common-home.nix
     ];
 
   home.packages = [

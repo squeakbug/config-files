@@ -28,14 +28,15 @@
 
   time.timeZone = "Europe/Amsterdam";
 
-  # Enable the X11 windowing system.
+  # Enable the windowing system (In last NixOS this is Wayland. In old releases it was X11).
+  # https://www.reddit.com/r/NixOS/comments/17ia1g8/i_dont_understand_nixoss_wayland_setup/
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Configure keymap in X11
+  # Configure keymap
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.options = "eurosign:e,caps:escape";
 
@@ -51,25 +52,11 @@
     initialPassword = "test";
     # TODO: move to home-manager
     packages = with pkgs; [
-      firefox
-      tree
     ];
   };
 
   # TODO: move to home-manager
   environment.systemPackages = with pkgs; [
-    curl
-    git
-    gnumake
-    gnupg
-    htop
-    openssl
-    tcpdump
-    tree
-    unzip
-    vim
-    vscodium
-    wget
   ];
 
   nix.extraOptions = ''

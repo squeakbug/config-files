@@ -67,7 +67,6 @@
     ... 
   } @ inputs:
     let
-      mkSystem = import ./utils/mk-system.nix inputs;
       # https://stackoverflow.com/a/54505212
       recursiveMerge = with builtins;
         attrList: let
@@ -84,14 +83,20 @@
             );
         in
           f [] attrList;
-      mkSystems = hostnames: recursiveMerge (map (hostname: mkSystem hostname) hostnames);
+      # Systems' configs differs significantly, so per host calls of homeManagerConfiguration
+      # are placed in host directories
+      mkHosts = hostnames: recursiveMerge (map (hostname: let
+          host = import ./hosts/${hostname} inputs;
+        in host.mkHost { }
+        ) hostnames
+      );
     in
       flake-parts.lib.mkFlake { inherit inputs; } {
         imports = [
           inputs.home-manager.flakeModules.home-manager
         ];
-        flake = mkSystems [
-          "gateway"
+        flake = mkHosts [
+          # "gateway"
           "homelab"
           "vps"
           "workstation"

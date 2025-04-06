@@ -7,6 +7,10 @@
   - Run `home-manager switch --flake .#username@hostname` to apply your home configuration.
         If you don't have home-manager installed, try `nix shell nixpkgs#home-manager`.
 
+```sh
+nix run github:nix-community/home-manager -- switch --flake .#workstation@workstation
+```
+
 ## Resources
 
 * [Introduction to Nix packet manager and NixOS Linux distribution](https://zero-to-nix.com/)
@@ -17,5 +21,7 @@
 
 * [snowflakeos](https://snowflakeos.org/)
 * [mise](https://github.com/jdx/mise)
+* [ryan4yin's config](https://github.com/ryan4yin/nix-config)
 
-TODO: introduce proxmox config to homelab config 
+TODO: introduce [proxmox config](https://github.com/ryan4yin/nix-config/) to homelab config 
+TODO: type classes in nix...

@@ -1,9 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 {
   imports =
     [
-      ../../../common-home.nix
+      ../../../../common-home.nix
     ];
 
   home.packages = [

@@ -1,14 +1,19 @@
 { config, pkgs, ... }:
 
 {
-  home.username = "workstation";
-  home.homeDirectory = "/home/workstation";
-
   home.stateVersion = "24.11";
 
   home.packages = [
     pkgs.cowsay
     pkgs.htop
+    pkgs.curl
+    pkgs.git
+    pkgs.openssl
+    pkgs.tcpdump
+    pkgs.tree
+    pkgs.vim
+    pkgs.wget
+    pkgs.neofetch
   ];
 
   home.file = {
