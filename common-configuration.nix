@@ -1,11 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
-
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless = {
     enable = true;
@@ -43,8 +38,9 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound.
-  hardware.pulseaudio.enable = true;
+  # Enable sound. Use pipewire
+  services.pulseaudio.enable = false;
+  hardware.pulseaudio.enable = false;
 
   users.users.squeakbug = {
     isNormalUser = true;

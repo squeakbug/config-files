@@ -58,6 +58,8 @@
   wayland.windowManager.hyprland = {
     enable = true;
     package = pkgs.hyprland;
+    xwayland.enable = true;
+
     settings = {
       general = {
         gaps_in = 0;

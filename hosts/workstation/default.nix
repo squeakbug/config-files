@@ -15,7 +15,7 @@
             allowUnfreePredicate = _: true;
           };
         };
-        extraSpecialArgs = {
+        extraSpecialArgs = {  
           inherit nixGL;
         };
         modules = [
@@ -24,7 +24,8 @@
       };
     in {
       nixosConfigurations = {
-        system = nixpkgs.lib.nixosSystem {
+        "workstation" = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
           modules = [
             ./system/configuration.nix
           ];
